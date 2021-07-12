@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <title>Clock</title>
+        <script src="../Plugins/jquery-3.6.0.min.js"></script>
+    </head>
+    <body>
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+            viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
+            <style type="text/css">
+                .stb{fill:url(#MyGradient);}
+                .st0{fill:#000;}
+                .st1{fill:#FFFFFF;}
+                .st2{fill:none;stroke:#ffffff;stroke-width:10;stroke-linecap:round;stroke-miterlimit:10;stroke-opacity: .5;}
+                .st3{fill:none;stroke:#ffffff;stroke-width:10;stroke-linecap:round;stroke-miterlimit:10;stroke-opacity: .5;}
+                .st4{fill:none;stroke:#ff0000;stroke-width:5;stroke-linecap:round;stroke-miterlimit:10;}
+            </style>
+            <g id="Layer_0_background">
+                <g id="Layer_2_background">
+                    <g>
+                        <circle class="stb" cx="256" cy="256" r="256"/>
+                    </g>
+                </g>
+            </g>
+            <g id="Layer_1_background">
+                <g id="Layer_2_background">
+                    <g>
+                        <circle class="st0" cx="256" cy="256" r="240"/>
+                    </g>
+                </g>
+            </g>
+            <g id="Layer_2_elements">
+                <g id="Layer_3_elements">
+                    <circle class="st1" cx="255.9108" cy="443.5227" r="5.8178"/>
+                    <circle class="st1" cx="441.8195" cy="259.946" r="5.8178"/>
+                    <circle class="st1" cx="255.9108" cy="69.3583" r="5.8178"/>
+                    <circle class="st1" cx="70.23" cy="259.946" r="5.8178"/>
+                    <g>
+                        <line id="pointerSecond" class="st4" x1="256" y1="256" x2="256" y2="90"/>
+                    </g>
+                    <g>
+                        <line id="pointerMinute" class="st3" x1="256" y1="256" x2="256" y2="90"/>
+                    </g>
+                    <g>
+                        <line id="pointerHour" class="st2" x1="256" y1="256" x2="256" y2="136"/>
+                    </g>
+                    <circle class="st1" cx="92.6336" cy="166.1973" r="3.9732"/>
+                    <circle class="st1" cx="160.7549" cy="94.8427" r="3.9732"/>
+                    <circle class="st1" cx="165.0636" cy="417.426" r="3.9732"/>
+                    <circle class="st1" cx="98.928" cy="350.6467" r="3.9732"/>
+                    <circle class="st1" cx="419.4159" cy="166.1973" r="3.9732"/>
+                    <circle class="st1" cx="351.2946" cy="94.8427" r="3.9732"/>
+                    <circle class="st1" cx="346.9859" cy="417.426" r="3.9732"/>
+                    <circle class="st1" cx="413.1216" cy="350.6467" r="3.9732"/>
+                </g>
+            </g>
+            <defs>
+                <linearGradient id="MyGradient">
+                  <stop offset="0%" stop-color="#F55" />
+                  <stop offset="25%" stop-color="#FF5" />
+                  <stop offset="50%" stop-color="#5F5" />
+                  <stop offset="75%" stop-color="#5FF" />
+                  <stop offset="100%" stop-color="#55F" />
+                </linearGradient>
+              </defs>
+        </svg>
+    </body>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@900&display=swap');
+        body{
+            margin: 0;
+            padding: 0;
+            background: rgb(255,255,255);
+            /* background: linear-gradient(135deg, rgba(255,0,0,1) 0%, rgba(255,252,0,1) 25%, rgba(0,255,0,1) 50%, rgba(0,255,255,1) 75%, rgba(0,0,255,1) 100%); */
+            font-family: 'Montserrat', sans-serif;
+            height: 100vh;
+            width: 100vw;
+            /* background-size: cover; */
+        }
+        svg{
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+    <script>
+    var GP = {
+        coefAngle: 6,
+        coefSecond: 166,
+        coefMinute: 166,
+        coefHour: 120,
+        angleSecond: 270,
+        angleMinute: 270,
+        angleHour: 270
+    }
+        window.onload = function() {
+            setInitialParams();
+            movePointers();
+        };
+
+        setInterval(()=>{
+            movePointers()
+        },1000);
+
+        function movePointers(){
+            
+            // var x_minute = parseInt($("#pointerMinute").attr(x2)) - 256;
+            // var y_minute = parseInt($("#pointerMinute").attr(y2)) - 256; 
+            // var x_hour = parseInt($("#pointerHour").attr(x2)) - 256; 
+            // var y_hour = parseInt($("#pointerHour").attr(y2)) - 256; 
+
+            GP.angleSecond += GP.coefAngle;
+            
+            verifyAngles();
+            
+            $("#pointerSecond").attr('x2',(Math.cos(degreeToRadian(GP.angleSecond)) * GP.coefSecond) + 256);
+            $("#pointerSecond").attr('y2', (Math.sin(degreeToRadian(GP.angleSecond)) * GP.coefSecond) + 256);
+
+            $("#pointerMinute").attr('x2',(Math.cos(degreeToRadian(GP.angleMinute)) * GP.coefMinute) + 256);
+            $("#pointerMinute").attr('y2', (Math.sin(degreeToRadian(GP.angleMinute)) * GP.coefMinute) + 256);
+
+            $("#pointerHour").attr('x2',(Math.cos(degreeToRadian(GP.angleHour)) * GP.coefHour) + 256);
+            $("#pointerHour").attr('y2', (Math.sin(degreeToRadian(GP.angleHour)) * GP.coefHour) + 256);
+
+        }
+        function degreeToRadian(degree){
+            return degree * (Math.PI/180)
+        }
+
+        function verifyAngles(){
+            if(GP.angleSecond == 360){
+                GP.angleSecond = 0;
+            } 
+
+            if(GP.angleSecond == 270){
+                GP.angleMinute += GP.coefAngle;
+            }
+
+            if(GP.angleMinute == 360){
+                GP.angleMinute = 0;
+            }
+
+            if(GP.angleMinute == 270 && GP.angleSecond == 270){
+                GP.angleHour += (GP.coefAngle*5);
+            }
+            
+            if(GP.angleHour == 360){
+                GP.angleHour = 0;
+            }            
+        }
+
+        function setInitialParams(){
+            var data = new Date();
+            GP.angleSecond = (data.getSeconds() * GP.coefAngle) - 90;
+            GP.angleMinute = (data.getMinutes() * GP.coefAngle) - 90;
+            GP.angleHour = (data.getHours() * GP.coefAngle * 5) - 90;
+        }
+    </script>
+</html>
